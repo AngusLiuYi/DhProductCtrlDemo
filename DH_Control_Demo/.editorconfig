@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS8629: 可为 null 的值类型可为 null。
+dotnet_diagnostic.CS8629.severity = silent
