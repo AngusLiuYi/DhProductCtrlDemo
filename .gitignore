@@ -1,3 +1,12 @@
 /DH_Control_Demo/.vs
-/DH_Control_Demo/bin/Debug
 /DH_Control_Demo/obj
+/DH_Control_Demo/DH_Control_Demo.sln
+/DH_Control_Demo/bin/Debug/net8.0-windows7.0/Log
+/DH_Control_Demo/bin/Debug/net8.0-windows7.0/runtimes
+DH_Control_Demo/bin/Debug/net8.0-windows7.0/System.Text.Encoding.CodePages.dll
+DH_Control_Demo/DH_Control_Demo.sln
+DH_Control_Demo/bin/Debug/net8.0-windows7.0/DH_Control_Demo.deps.json
+DH_Control_Demo/bin/Debug/net8.0-windows7.0/DH_Control_Demo.dll
+DH_Control_Demo/bin/Debug/net8.0-windows7.0/DH_Control_Demo.exe
+DH_Control_Demo/bin/Debug/net8.0-windows7.0/DH_Control_Demo.pdb
+DH_Control_Demo/bin/Debug/net8.0-windows7.0/DH_Control_Demo.runtimeconfig.json
