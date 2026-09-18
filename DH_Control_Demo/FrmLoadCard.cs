@@ -129,6 +129,14 @@ namespace DH_Control_Demo
         /// <returns></returns>
         private static string GtsInitCard(List<AxisInitConfigStruct> axisInitConfigs, List<GtsConfigStruct> gtsConfig)
         {
+
+            //注意，固高卡必须要在bin文件目录下加载一下文件。所需文件可以向固高技术索取。
+            //1、ecat_config.dll
+            //2、ecat_master.dll
+            //3、gts.dll
+            //4、gts.lib
+            //5、Gecat.xml
+
             List<short> result = new();
             //mc.GTN_Close();
             Thread.Sleep(200);

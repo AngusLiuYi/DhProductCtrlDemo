@@ -25,28 +25,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="bin\Debug\net6.0-windows\AntdUI.deps.json" />
-    <Content Include="bin\Debug\net6.0-windows\DH_Control_Demo.deps.json" />
-    <Content Include="bin\Debug\net6.0-windows\DH_Control_Demo.runtimeconfig.json" />
+    <Content Include="bin\Debug\net8.0-windows7.0\DH_Control_Demo.deps.json" />
+    <Content Include="bin\Debug\net8.0-windows7.0\DH_Control_Demo.runtimeconfig.json" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Gecat.xml" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Image\MCE.png" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Image\RGI-100-30.png" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Image\SoftLand.png" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Image\VLA.png" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Image\微信截图_20231013102838.png" />
+    <Content Include="bin\Debug\net8.0-windows7.0\Image\微信截图_20250311171321.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\net6.0-windows\AntdUI.dll" />
-    <None Include="bin\Debug\net6.0-windows\Config\AxisConfig.config" />
-    <None Include="bin\Debug\net6.0-windows\Config\PointData.csv" />
-    <None Include="bin\Debug\net6.0-windows\DH_Control_Demo.dll" />
-    <None Include="bin\Debug\net6.0-windows\DH_Control_Demo.exe" />
-    <None Include="bin\Debug\net6.0-windows\DH_Control_Demo.pdb" />
-    <None Include="bin\Debug\net6.0-windows\ecat_motion.dll" />
-    <None Include="bin\Debug\net6.0-windows\Image\MCE.png" />
-    <None Include="bin\Debug\net6.0-windows\Image\RGI-100-30.png" />
-    <None Include="bin\Debug\net6.0-windows\Image\SoftLand.png" />
-    <None Include="bin\Debug\net6.0-windows\Image\VLAR-25-25-M2-24-02.png" />
-    <None Include="bin\Debug\net6.0-windows\Image\微信截图_20231013102838.png" />
-    <None Include="bin\Debug\net6.0-windows\Image\微信截图_20250311171321.png" />
-    <None Include="bin\Debug\net6.0-windows\Image\新建 Microsoft Word 文档.docx" />
-    <None Include="bin\Debug\net6.0-windows\LTDMC.dll" />
-    <None Include="bin\Debug\net6.0-windows\LTDMC.lib" />
+    <None Include="bin\Debug\net8.0-windows7.0\AngusTools.dll" />
+    <None Include="bin\Debug\net8.0-windows7.0\AntdUI.dll" />
+    <None Include="bin\Debug\net8.0-windows7.0\Config\AxisConfig.config" />
+    <None Include="bin\Debug\net8.0-windows7.0\DH_Control_Demo.dll" />
+    <None Include="bin\Debug\net8.0-windows7.0\DH_Control_Demo.exe" />
+    <None Include="bin\Debug\net8.0-windows7.0\DH_Control_Demo.pdb" />
+    <None Include="bin\Debug\net8.0-windows7.0\Image\新建 Microsoft Word 文档.docx" />
+    <None Include="bin\Debug\net8.0-windows7.0\Log\2026-05-24 - 副本.log" />
+    <None Include="bin\Debug\net8.0-windows7.0\Log\2026-05-24.log" />
+    <None Include="bin\Debug\net8.0-windows7.0\Log\2026-05-25.log" />
+    <None Include="bin\Debug\net8.0-windows7.0\LTDMC.dll" />
+    <None Include="bin\Debug\net8.0-windows7.0\LTDMC.lib" />
+    <None Include="bin\Debug\net8.0-windows7.0\runtimes\win\lib\net8.0\System.Text.Encoding.CodePages.dll" />
+    <None Include="bin\Debug\net8.0-windows7.0\System.Text.Encoding.CodePages.dll" />
   </ItemGroup>
 
   <ItemGroup>
