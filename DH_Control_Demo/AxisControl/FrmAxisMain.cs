@@ -2,6 +2,7 @@
 using AntdUI;
 using csLTDMC;
 using DH_Control_Demo.AxisControl.DH_AxisCtrl;
+using DH_Control_Demo.TestDemo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -56,7 +57,7 @@ namespace DH_Control_Demo.AxisControl
             //更新界面选定数据
             selHomeControler_SelectedIndexChanged(new object(), new IntEventArgs(0));
             //更新点位数据
-            GetPointData();
+            GetPointData(_AxisNum);
         }
 
         short MoveDoneTrig;
@@ -115,6 +116,11 @@ namespace DH_Control_Demo.AxisControl
                     MoveDoneTrig = act.IsStopping;
                 }
             }));
+            tabPage1.Invoke(() =>
+            {
+                altProcessStep.Text = TestPE.ProcessStep.ToString();
+                altProcessError.Text = TestPE.ErrMsg;
+            });
         }
         #endregion
 
@@ -277,9 +283,10 @@ namespace DH_Control_Demo.AxisControl
 
         #region 点位数据拉取
         DataTable DtPoint;
-        private void GetPointData()
+        private void GetPointData(int axisNum)
         {
-            DtPoint = CsvHelper.CsvToDataTable(@"Config\\PointData.csv");
+            //@"..\..\..\Data\FlexibleForceData.csv"
+            DtPoint = CsvHelper.CsvToDataTable($@"..\..\..\Data\PointData_轴{axisNum}.csv");
             table1.DataSource = DtPoint;
         }
 
@@ -329,7 +336,7 @@ namespace DH_Control_Demo.AxisControl
         /// <param name="e"></param>
         private void Table1Reload(object sender, EventArgs e)
         {
-            GetPointData();
+            GetPointData(_AxisNum);
         }
 
         /// <summary>
@@ -369,7 +376,7 @@ namespace DH_Control_Demo.AxisControl
         /// <param name="e"></param>
         private void Table1Save(object sender, EventArgs e)
         {
-            CsvHelper.DataTableToCsv(DtPoint, @"Config\\PointData.csv");
+            CsvHelper.DataTableToCsv(DtPoint, $@"..\..\..\Data\PointData_轴{_AxisNum}.csv");
 
         }
 
@@ -442,8 +449,8 @@ namespace DH_Control_Demo.AxisControl
         /// </summary>
         private void StartMonitor()
         {
-            ushort statusAdd = 1, errorAdd = 2,actForceAdd=3;
-            int statusValue = 0, errorValue = 0,actForceValue=0;
+            ushort statusAdd = 1, errorAdd = 2, actForceAdd = 3;
+            int statusValue = 0, errorValue = 0, actForceValue = 0;
 
             _ = Task.Factory.StartNew(() =>
             {
@@ -490,71 +497,49 @@ namespace DH_Control_Demo.AxisControl
         }
 
         /// <summary>
-        /// 表格右键功能实现
-        /// 加载、保存
+        /// 力控参数SDO写入
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Table_FlexibleForce_MouseDown(object sender, MouseEventArgs e)
+        private void Btn_DataDownLoad_Click(object sender, EventArgs e)
         {
-            //鼠标在数据表格上按下鼠标右键后创建右键菜单
-            if (e.Button != MouseButtons.Right) return;
-
-            IContextMenuStripItem[] menuStripItems =
-            [
-                new AntdUI.ContextMenuStripItem("加载","加载历史数据").SetIcon("FolderOpenOutlined"),
-                new AntdUI.ContextMenuStripItem("保存","保存数据到备份").SetIcon("SaveOutlined"),
-                new AntdUI.ContextMenuStripItemDivider(),
-                new AntdUI.ContextMenuStripItem("写入","通过SDO将数据写入到驱动器").SetIcon("DownloadOutlined")
-            ];
-
-            //委托右键菜单的实现
-            AntdUI.ContextMenuStrip.open(this, e =>
+            var btn = sender as AntdUI.Button;
+            Stopwatch sw = Stopwatch.StartNew();
+            btn.Loading = true;
+            foreach (DataRow row in DtFlexibleForceData.Rows)
             {
-                switch (e.Text)
+                row["Res"] = "未执行";
+            }
+            Table_FlexibleForce.DataSource = DtFlexibleForceData;
+            Task<bool> task = Task<bool>.Factory.StartNew(() =>
+            {
+                var isSucess = true;
+                for (int i = 0; i < DtFlexibleForceData.Rows.Count; i++)
                 {
-                    case "加载":
-                        DtFlexibleForceData.Clear();//清除数据
-                        DtFlexibleForceData = AngusTools.FileHelper.CsvHelper.CsvToDataTable(@"..\..\..\Data\FlexibleForceData.csv");//加载力控数据
-                        Table_FlexibleForce.DataSource = DtFlexibleForceData;
-                        break;
-                    case "保存":
-                        AngusTools.FileHelper.CsvHelper.DataTableToCsv(DtFlexibleForceData, @"..\..\..\Data\FlexibleForceData.csv");
-                        break;
-                    case "写入":
-                        Stopwatch sw = Stopwatch.StartNew();
-                        foreach (DataRow row in DtFlexibleForceData.Rows)
-                        {
-                            row["Res"] = "未执行";
-                        }
-                        Table_FlexibleForce.DataSource = DtFlexibleForceData;
-                        Task<bool> task = Task<bool>.Factory.StartNew(() =>
-                        {
-                            Thread.Sleep(50);
-                            var isSucess = true;
-                            for (int i = 0; i < DtFlexibleForceData.Rows.Count; i++)
-                            {
-                                var data = DtFlexibleForceData.Rows[i]["Len"].ToString() == "32" ? Convert.ToInt32(DtFlexibleForceData.Rows[i]["Value"].ToString()) : Convert.ToInt16(DtFlexibleForceData.Rows[i]["Value"].ToString());
-                                var res = GVL.AxisMontions[_AxisNum].SetSdo(Convert.ToUInt16(DtFlexibleForceData.Rows[i]["Add"].ToString(), 16),
-                                                              Convert.ToUInt16(DtFlexibleForceData.Rows[i]["SubAdd"].ToString(), 16),
-                                                              data);
-                                if (res == 0) DtFlexibleForceData.Rows[i]["Res"] = "True";
-                                else
-                                {
-                                    DtFlexibleForceData.Rows[i]["Res"] = $"False--{res}";
-                                    isSucess = false;
-                                }
-                                Table_FlexibleForce.DataSource = DtFlexibleForceData;
-                            }
-                            return isSucess;
-                        });
-                        task.Wait();
-                        sw.Stop();
-                        if (task.Result) AntdUI.Modal.open(this, "Success", $"SDO写入成功，无错误。指令执行时间：{sw.ElapsedMilliseconds}ms", TType.Success);
-                        else AntdUI.Modal.open(this, "Error", $"SDO写入部分未成功。指令执行时间：{sw.ElapsedMilliseconds}ms", TType.Error);
-                        break;
+                    short res;
+                    if (DtFlexibleForceData.Rows[i]["Len"].ToString() == "32")
+                        res = GVL.AxisMontions[_AxisNum].SetSdo(Convert.ToUInt16(DtFlexibleForceData.Rows[i]["Add"].ToString(), 16),
+                                                      Convert.ToUInt16(DtFlexibleForceData.Rows[i]["SubAdd"].ToString(), 16),
+                                                      Convert.ToInt32(DtFlexibleForceData.Rows[i]["Value"].ToString()));
+                    else
+                        res = GVL.AxisMontions[_AxisNum].SetSdo(Convert.ToUInt16(DtFlexibleForceData.Rows[i]["Add"].ToString(), 16),
+                                                      Convert.ToUInt16(DtFlexibleForceData.Rows[i]["SubAdd"].ToString(), 16),
+                                                      Convert.ToInt16(DtFlexibleForceData.Rows[i]["Value"].ToString()));
+                    if (res == 0) DtFlexibleForceData.Rows[i]["Res"] = "True";
+                    else
+                    {
+                        DtFlexibleForceData.Rows[i]["Res"] = $"False--{res}";
+                        isSucess = false;
+                    }
+                    Table_FlexibleForce.DataSource = DtFlexibleForceData;
                 }
-            }, menuStripItems);
+                return isSucess;
+            });
+            task.Wait();
+            btn.Loading = false;
+            sw.Stop();
+            if (task.Result) AntdUI.Modal.open(this, "Success", $"SDO写入成功，无错误。指令执行时间：{sw.ElapsedMilliseconds}ms", TType.Success);
+            else AntdUI.Modal.open(this, "Error", $"SDO写入部分未成功。指令执行时间：{sw.ElapsedMilliseconds}ms", TType.Error);
         }
 
         /// <summary>
@@ -567,7 +552,6 @@ namespace DH_Control_Demo.AxisControl
             var btn = sender as AntdUI.Button;
             Stopwatch sw = Stopwatch.StartNew();
             btn.Loading = true;
-            ushort enableAdd = 0, startAdd = 1;
             Task task = Task.Factory.StartNew(() =>
             {
                 //SDO启动方法
@@ -577,18 +561,22 @@ namespace DH_Control_Demo.AxisControl
                 //GVL.AxisMontions[_AxisNum].SetSdo(0x5010, 0x2, (Int16)1);//SoftLand Start写1
 
                 //PDO启动方法
-                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID, 2, startAdd, 1, 0);
-                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID, 2, enableAdd, 1, 1);
+                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID,
+                    2,
+                    1,
+                    1,
+                    0);
                 Thread.Sleep(10);
-                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID, 2, startAdd, 1, 1);
-
-                //TODO 等待软着陆流程结束/超时，将启动信号复位
-                do
-                {
-                    Application.DoEvents();
-                    Thread.Sleep(0);
-                } while (sw.ElapsedMilliseconds<=10000);
-                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID, 2, startAdd, 1, 0);
+                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID,
+                    2,
+                    0,
+                    1,
+                    1);
+                LTDMC.nmc_write_rxpdo_extra((ushort)GVL.AxisMontions[_AxisNum].CurrentConfig.CardID,
+                    2,
+                    1,
+                    1,
+                    1);
             });
 
             task.Wait();
@@ -604,7 +592,6 @@ namespace DH_Control_Demo.AxisControl
         {
             AntdUI.Modal.open(this, "Error", "暂未实现停止功能，当前固件不支持软着陆过程中停止！");
         }
-
         #endregion
 
         private void FrmAxisMain_Load(object sender, EventArgs e)
@@ -612,6 +599,19 @@ namespace DH_Control_Demo.AxisControl
             InitForceData();
         }
 
+        private void Btn_AutoProcessStart_Click(object sender, EventArgs e)
+        {
+            TestPE.ProcessStart();
+        }
 
+        private void Btn_AutoProcessPause_Click(object sender, EventArgs e)
+        {
+            TestPE.ProcessPause();
+        }
+
+        private void Btn_AutoProcessStop_Click(object sender, EventArgs e)
+        {
+            TestPE.ProcessStop();
+        }
     }
 }

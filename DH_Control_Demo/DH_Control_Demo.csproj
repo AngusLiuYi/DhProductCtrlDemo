@@ -25,6 +25,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="bin\Debug\net6.0-windows\AntdUI.deps.json" />
+    <Content Include="bin\Debug\net6.0-windows\DH_Control_Demo.deps.json" />
+    <Content Include="bin\Debug\net6.0-windows\DH_Control_Demo.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net6.0-windows\AntdUI.dll" />
+    <None Include="bin\Debug\net6.0-windows\Config\AxisConfig.config" />
+    <None Include="bin\Debug\net6.0-windows\Config\PointData.csv" />
+    <None Include="bin\Debug\net6.0-windows\DH_Control_Demo.dll" />
+    <None Include="bin\Debug\net6.0-windows\DH_Control_Demo.exe" />
+    <None Include="bin\Debug\net6.0-windows\DH_Control_Demo.pdb" />
+    <None Include="bin\Debug\net6.0-windows\ecat_motion.dll" />
+    <None Include="bin\Debug\net6.0-windows\Image\MCE.png" />
+    <None Include="bin\Debug\net6.0-windows\Image\RGI-100-30.png" />
+    <None Include="bin\Debug\net6.0-windows\Image\SoftLand.png" />
+    <None Include="bin\Debug\net6.0-windows\Image\VLAR-25-25-M2-24-02.png" />
+    <None Include="bin\Debug\net6.0-windows\Image\微信截图_20231013102838.png" />
+    <None Include="bin\Debug\net6.0-windows\Image\微信截图_20250311171321.png" />
+    <None Include="bin\Debug\net6.0-windows\Image\新建 Microsoft Word 文档.docx" />
+    <None Include="bin\Debug\net6.0-windows\LTDMC.dll" />
+    <None Include="bin\Debug\net6.0-windows\LTDMC.lib" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="AngusTools">
       <HintPath>Libs\AngusTools.dll</HintPath>
     </Reference>
@@ -62,10 +87,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
   </ItemGroup>
 
 </Project>

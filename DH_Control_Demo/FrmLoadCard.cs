@@ -114,8 +114,7 @@ namespace DH_Control_Demo
             try
             {
                 ulong nCardHandle = 0;
-                ImcApi.IMC_OpenCardHandle(0, ref nCardHandle);
-                ImcApi.IMC_CloseCard(nCardHandle);
+                LTDMC.dmc_board_close();
             }
             catch (Exception)
             {
